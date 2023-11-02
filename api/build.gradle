@@ -1,3 +1,11 @@
+plugins {
+    id 'application'
+}
+
+repositories {
+    mavenCentral()
+}
+
 dependencies {
     implementation project(':domain')
     implementation project(':infra')
