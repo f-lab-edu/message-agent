@@ -1,0 +1,4 @@
+rootProject.name = 'message-agent'
+include 'domain'
+include 'infra'
+include 'api'
