@@ -1,0 +1,22 @@
+name: github-action
+on:
+  push:
+    branches: dev
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: set up jdk 17
+        with:
+          java-version: '17'
+          distribution: 'corretto'
+
+      - name: set up gradle
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: build
