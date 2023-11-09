@@ -1,7 +1,7 @@
 name: github-action
 on:
   push:
-    branches: [ "main", "github-action" ]
+    branches: [ "main"]
   pull_request:
     branches: [ "*" ]
 
@@ -19,10 +19,7 @@ jobs:
           java-version: '17'
           distribution: 'corretto'
 
-      - name: chmod to make gradlew executable
-        run: chmod +x ./gradlew
-
       - name: set up gradle
         uses: gradle/gradle-build-action@v2
         with:
-          arguments: build
+          arguments: test
