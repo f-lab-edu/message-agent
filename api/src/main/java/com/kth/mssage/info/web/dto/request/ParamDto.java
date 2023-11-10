@@ -4,8 +4,8 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.As;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
-import java.util.List;
-
+import com.kth.mssage.info.web.dto.request.skill.WeatherDto;
+import lombok.Builder;
 
 @JsonTypeInfo(
         use = Id.NAME,
@@ -14,13 +14,10 @@ import java.util.List;
         visible = true
 )
 @JsonSubTypes({
-        @JsonSubTypes.Type(name = "todo", value = RequestTodoDto.class),
-        @JsonSubTypes.Type(name = "weather", value = RequestWeatherDto.class)
+        @JsonSubTypes.Type(name = "날씨", value = WeatherDto.class)
 })
-public class RequestInfoDto {
+@Builder
+public class ParamDto {
 
-    private Long memberId;
-    private List<String> days;
-    private String hour;
-    private String minute;
+    private final String type;
 }
