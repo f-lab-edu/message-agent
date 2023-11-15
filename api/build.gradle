@@ -12,6 +12,10 @@ dependencies {
     implementation project(':domain')
     implementation project(':infra')
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.8.1'
 
     compileOnly 'org.projectlombok:lombok:1.18.30'
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.boot:spring-boot-test-autoconfigure'
 }
