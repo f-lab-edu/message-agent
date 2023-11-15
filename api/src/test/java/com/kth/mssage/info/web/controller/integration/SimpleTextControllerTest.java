@@ -15,7 +15,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @AutoConfigureMockMvc
 @SpringBootTest
-class InfoControllerTest {
+class SimpleTextControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -25,13 +25,13 @@ class InfoControllerTest {
 
     @BeforeEach
     public void setup() throws Exception {
-        jsonRequest = JsonReader.readJsonFile("__files\\payload\\simple-text-message-request.json");
+        jsonRequest = JsonReader.readJsonFile("__files\\payload\\chatbot-message-request.json");
         jsonResponse = JsonReader.readJsonFile("__files\\payload\\simple-text-message-response.json");
     }
 
     @Test
-    public void testYourController() throws Exception {
-        mockMvc.perform(post("/info/message")
+    public void testSimpleTextController() throws Exception {
+        mockMvc.perform(post("/simple-text/message")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonRequest))
                 .andExpect(status().isOk())
