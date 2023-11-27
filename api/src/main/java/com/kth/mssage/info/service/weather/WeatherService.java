@@ -10,10 +10,16 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 @Slf4j
 @RequiredArgsConstructor
 @Service
 public class WeatherService {
+
+    private final static String BASE_DATE_PATTERN = "yyyyMMdd";
+    private final static String BASE_MINUTE = "00";
 
     private final WeatherProperties weatherProperties;
     private final WeatherApiClient weatherApiClient;
@@ -53,14 +59,31 @@ public class WeatherService {
     }
 
     private String getWeatherInfo(String nx, String ny) {
-        return weatherApiClient.getWeatherInfo(weatherProperties.getServiceKey(),
+        return weatherApiClient.getWeatherInfo(
+                weatherProperties.getServiceKey(),
                 weatherProperties.getNumOfRows(),
                 weatherProperties.getPageNo(),
                 weatherProperties.getDataType(),
-                weatherProperties.getBaseDate(),
-                weatherProperties.getBaseTime(),
+                getBaseDate(),
+                getBaseTime(),
                 nx,
                 ny);
     }
 
+    private String getBaseDate() {
+        return LocalDateTime.now().format(DateTimeFormatter.ofPattern(BASE_DATE_PATTERN));
+    }
+
+    private String getBaseTime() {
+        LocalDateTime now = LocalDateTime.now();
+        int hour = now.getHour();
+        if (validRenewalWeatherInfo40LessMinute(now.getMinute())) {
+            return hour - 1 + BASE_MINUTE;
+        }
+        return hour + BASE_MINUTE;
+    }
+
+    private boolean validRenewalWeatherInfo40LessMinute(int minute) {
+        return minute < 40;
+    }
 }

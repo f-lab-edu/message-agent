@@ -23,13 +23,4 @@ public class WeatherInfoDto {
                 DateTimeFormatter.ofPattern("yyyy년 MM월 dd일(E) HH:mm")
         );
     }
-
-    @Override
-    public String toString() {
-        return location +
-                "현재 온도: " + temp + "\n" +
-                "강수량: " + rainAmount + "% \n" +
-                "습도: " + humid + "% \n" +
-                "현재 시간" + lastUpdateTime;
-    }
 }
