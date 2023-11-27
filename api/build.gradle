@@ -24,7 +24,6 @@ dependencies {
     implementation project(':infra')
 
     annotationProcessor 'org.projectlombok:lombok'
-    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 
     implementation 'org.json:json:20231013'
     implementation 'org.projectlombok:lombok'
