@@ -23,29 +23,28 @@ public class SimpleTextService {
 
     private TemplateDto<SimpleTextDto> checkMessageType(RequestActionDto<ParamDto> requestActionDto) {
         if (requestActionDto.findTypeParamDto() instanceof WeatherDto weatherDto) {
-            return createWeatherMessage(weatherDto);
+            SimpleTextContentDto weatherMessage = createWeatherMessage(weatherDto);
+            return setUpTextMessage(weatherMessage);
         }
 
         //TODO: 임시 값 지정
         return null;
     }
 
-    public TemplateDto<SimpleTextDto> createWeatherMessage(WeatherDto weatherDto) {
+    public SimpleTextContentDto createWeatherMessage(WeatherDto weatherDto) {
         WeatherInfoDto weatherInfoDto = weatherService.createWeatherInfoDto(weatherDto);
 
-        SimpleTextContentDto textContentDto = SimpleTextContentDto.builder()
+        return SimpleTextContentDto.builder()
                 .text(createWeatherTextString(weatherInfoDto))
                 .build();
-
-        return setUpTextMessage(textContentDto);
     }
 
     private String createWeatherTextString(WeatherInfoDto weatherInfoDto) {
-        return weatherInfoDto.getLocation() +
-                "현재 온도: " + weatherInfoDto.getTemp() + "\n" +
+        return weatherInfoDto.getLocation() + " \n" +
+                "현재 온도: " + weatherInfoDto.getTemp() + "°C \n" +
                 "강수량: " + weatherInfoDto.getRainAmount() + "% \n" +
                 "습도: " + weatherInfoDto.getHumid() + "% \n" +
-                "현재 시간" + weatherInfoDto.getLastUpdateTime();
+                "현재 시간: " + weatherInfoDto.getLastUpdateTime();
     }
 
     private TemplateDto<SimpleTextDto> setUpTextMessage(SimpleTextContentDto textContent) {
