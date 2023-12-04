@@ -5,11 +5,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @FeignClient(name = "weather-client",
-        url = "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getUltraSrtNcst"
+        url = "${weather.api}"
 )
 public interface WeatherApiClient {
 
-    @GetMapping(consumes = "application/json")
+    @GetMapping(path = "/1360000/VilageFcstInfoService_2.0/getUltraSrtNcst")
     String getWeatherInfo(@RequestParam(value = "serviceKey") String serviceKey,
                           @RequestParam(value = "numOfRows") String numOfRows,
                           @RequestParam(value = "pageNo") String pageNo,

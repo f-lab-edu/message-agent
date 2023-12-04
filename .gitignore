@@ -5,6 +5,3 @@ build/
 #intellij
 .idea
 out/
-
-#project
-application-*.yml

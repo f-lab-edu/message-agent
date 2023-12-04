@@ -1,0 +1,5 @@
+weather:
+  serviceKey: ${WEATHER_KEY}
+  pageNo: 1
+  numOfRows: 100
+  dataType: JSON
