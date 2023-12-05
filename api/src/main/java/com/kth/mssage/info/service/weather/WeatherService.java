@@ -2,16 +2,26 @@ package com.kth.mssage.info.service.weather;
 
 import com.kth.mssage.info.client.WeatherApiClient;
 import com.kth.mssage.info.properties.WeatherProperties;
+import com.kth.mssage.info.web.dto.info.LocalInfoDto;
 import com.kth.mssage.info.web.dto.info.WeatherInfoDto;
 import com.kth.mssage.info.web.dto.request.skill.WeatherDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVRecord;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
+import java.io.Reader;
+import java.nio.file.Files;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -25,13 +35,12 @@ public class WeatherService {
     private final WeatherApiClient weatherApiClient;
 
     public WeatherInfoDto createWeatherInfoDto(WeatherDto weatherDto) {
-        // weatherDto의 location으로 격자(위도,경도가 아님) 찾아와야한다
-        // 아래는 예시 데이터
         String location = weatherDto.getLocation();
-        String nx = "67";
-        String ny = "100";
-        String weatherInfo = getWeatherInfo(nx, ny);
-        log.debug("데이터를 가지고 오나요? "+ weatherInfo);
+
+        LocalInfoDto localInfoDto = findByRegion(location);
+
+        String weatherInfo = getWeatherInfo(localInfoDto.getNx(), localInfoDto.getNy());
+        log.debug("날씨 Json data "+ weatherInfo);
 
         JSONObject jsonObject = new JSONObject(weatherInfo);
         JSONArray jsonArray = jsonObject.getJSONObject("response")
@@ -56,6 +65,43 @@ public class WeatherService {
         }
 
         return new WeatherInfoDto(location, temp, rainAmount, humid);
+    }
+
+    public LocalInfoDto findByRegion(String location) {
+        String[] parts = location.split(" ", 3);
+
+        String regionCity = parts.length > 0 ? parts[0] : "";
+        String regionTown = parts.length > 1  ? parts[1] : "";
+        String regionVillage = parts.length > 2 ? parts[2] : "";
+
+        List<LocalInfoDto> allData = loadWeatherInfo();
+        return allData.stream()
+                .filter(localDto -> localDto.getRegionCity().equals(regionCity) &&
+                        localDto.getRegionTown().equals(regionTown) &&
+                        localDto.getRegionVillage().equals(regionVillage))
+                .findFirst()
+                .orElseThrow(RuntimeException::new); //TODO: 예외 처리 로직 필요
+    }
+
+    @Cacheable(value = "weatherInfo")
+    public List<LocalInfoDto> loadWeatherInfo() {
+        List<LocalInfoDto> localInfoDtoList = new ArrayList<>();
+        try (Reader reader = Files.newBufferedReader(new ClassPathResource("weather.csv").getFile().toPath());
+             CSVParser csvParser = new CSVParser(reader, CSVFormat.DEFAULT.withFirstRecordAsHeader())) {
+
+            for (CSVRecord record : csvParser) {
+                LocalInfoDto localDto = new LocalInfoDto(
+                        record.get("region_city"), record.get("region_town"), record.get("region_village"),
+                        record.get("nx"), record.get("ny")
+                );
+
+                localInfoDtoList.add(localDto);
+            }
+        } catch (Exception e) {
+            //TODO: 예외 처리 로직
+        }
+
+        return localInfoDtoList;
     }
 
     private String getWeatherInfo(String nx, String ny) {
