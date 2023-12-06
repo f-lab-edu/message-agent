@@ -47,7 +47,7 @@
     "name": "<액션 이름>",
     "params": {
       "type": "날씨",
-      "location": "사용자가 원하는 위치"
+      "location": "대전광역시 서구 둔산동"
     },
     "detailParams": {},
     "clientExtra": {}

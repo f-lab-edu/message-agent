@@ -15,4 +15,8 @@ public class ActionDto<T extends ParamDto> {
     public ActionDto(@JsonProperty("params") T paramDto) {
         this.paramDto = paramDto;
     }
+
+    public T checkType() {
+        return paramDto;
+    }
 }

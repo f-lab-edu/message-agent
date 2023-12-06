@@ -15,4 +15,8 @@ public class RequestActionDto<T extends ParamDto> {
     public RequestActionDto(@JsonProperty("action") ActionDto<T> action) {
         this.action = action;
     }
+
+    public T findTypeParamDto() {
+        return action.checkType();
+    }
 }
