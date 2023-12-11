@@ -32,7 +32,7 @@ public class SimpleTextService {
     }
 
     public SimpleTextContentDto createWeatherMessage(WeatherDto weatherDto) {
-        WeatherInfoDto weatherInfoDto = weatherService.createWeatherInfoDto(weatherDto);
+        WeatherInfoDto weatherInfoDto = weatherService.getWeatherInfoDto(weatherDto);
 
         return SimpleTextContentDto.builder()
                 .text(createWeatherTextString(weatherInfoDto))

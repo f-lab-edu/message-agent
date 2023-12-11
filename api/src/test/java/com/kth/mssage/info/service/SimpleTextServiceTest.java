@@ -34,7 +34,7 @@ class SimpleTextServiceTest {
         WeatherInfoDto weatherInfoDto =
                 new WeatherInfoDto("대전광역시 서구 둔산동", 10.0, 10.0, 10.0);
 
-        when(weatherService.createWeatherInfoDto(weatherDto)).thenReturn(weatherInfoDto);
+        when(weatherService.getWeatherInfoDto(weatherDto)).thenReturn(weatherInfoDto);
 
         SimpleTextContentDto weatherMessage = simpleTextService.createWeatherMessage(weatherDto);
         String weatherMessageText = weatherMessage.getText();

@@ -35,7 +35,7 @@ public class WeatherService {
     private final WeatherProperties weatherProperties;
     private final WeatherApiClient weatherApiClient;
 
-    public WeatherInfoDto createWeatherInfoDto(WeatherDto weatherDto) {
+    public WeatherInfoDto getWeatherInfoDto(WeatherDto weatherDto) {
         String location = weatherDto.getLocation();
 
         LocalInfoValue localInfoValue = findByRegion(location);
@@ -75,13 +75,16 @@ public class WeatherService {
         String regionTown = parts.length > 1  ? parts[1] : "";
         String regionVillage = parts.length > 2 ? parts[2] : "";
 
-        Map<LocalInfoKey, LocalInfoValue> localInfoValueMap = loadWeatherInfo();
-        return localInfoValueMap.get(new LocalInfoKey(
-                regionCity, regionTown, regionVillage
-        ));
+        return loadSingleWeatherInfo(new LocalInfoKey(regionCity, regionTown, regionVillage));
     }
 
-    @Cacheable(value = "weatherInfo", key = "")
+    @Cacheable(value = "weatherInfo", key = "#localInfoKey")
+    public LocalInfoValue loadSingleWeatherInfo(LocalInfoKey localInfoKey) {
+        Map<LocalInfoKey, LocalInfoValue> localInfoMap = loadWeatherInfo();
+        return localInfoMap.get(localInfoKey);
+    }
+
+    @Cacheable(value = "weatherInfo")
     public Map<LocalInfoKey, LocalInfoValue> loadWeatherInfo() {
         Map<LocalInfoKey, LocalInfoValue> localInfoMap = new HashMap<>();
         try (Reader reader = Files.newBufferedReader(new ClassPathResource("weather.csv").getFile().toPath());
