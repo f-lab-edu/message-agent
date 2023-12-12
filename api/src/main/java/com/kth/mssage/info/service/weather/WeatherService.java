@@ -4,6 +4,13 @@ import com.kth.mssage.info.client.WeatherApiClient;
 import com.kth.mssage.info.properties.WeatherProperties;
 import com.kth.mssage.info.web.dto.info.WeatherInfoDto;
 import com.kth.mssage.info.web.dto.request.skill.WeatherDto;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
+import java.util.Map;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -16,13 +23,6 @@ import org.json.JSONObject;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
-
-import java.io.Reader;
-import java.nio.file.Files;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
-import java.util.Map;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -41,7 +41,7 @@ public class WeatherService {
         LocalInfoValue localInfoValue = findByRegion(location);
 
         String weatherInfo = getWeatherInfo(localInfoValue.getNx(), localInfoValue.getNy());
-        log.debug("날씨 Json data "+ weatherInfo);
+        log.info("날씨 Json data "+ weatherInfo);
 
         JSONObject jsonObject = new JSONObject(weatherInfo);
         JSONArray jsonArray = jsonObject.getJSONObject("response")
@@ -87,18 +87,20 @@ public class WeatherService {
     @Cacheable(value = "weatherInfo")
     public Map<LocalInfoKey, LocalInfoValue> loadWeatherInfo() {
         Map<LocalInfoKey, LocalInfoValue> localInfoMap = new HashMap<>();
-        try (Reader reader = Files.newBufferedReader(new ClassPathResource("weather.csv").getFile().toPath());
-             CSVParser csvParser = new CSVParser(reader, CSVFormat.DEFAULT.withFirstRecordAsHeader())) {
+        try (InputStream inputStream = new ClassPathResource("weather.csv").getInputStream();
+            Reader reader = new InputStreamReader(inputStream);
+            CSVParser csvParser = new CSVParser(reader, CSVFormat.DEFAULT.withFirstRecordAsHeader())) {
 
             for (CSVRecord record : csvParser) {
                 localInfoMap.put(
-                        new LocalInfoKey(record.get("region_city"), record.get("region_town"), record.get("region_village")),
-                        new LocalInfoValue(record.get("nx"), record.get("ny"))
+                    new LocalInfoKey(record.get("region_city"), record.get("region_town"), record.get("region_village")),
+                    new LocalInfoValue(record.get("nx"), record.get("ny"))
                 );
             }
         } catch (Exception e) {
             //TODO: 예외 처리 로직
         }
+
 
         return localInfoMap;
     }
