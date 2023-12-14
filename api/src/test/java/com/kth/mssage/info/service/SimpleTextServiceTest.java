@@ -7,12 +7,13 @@ import com.kth.mssage.info.web.dto.response.skill.simpletext.SimpleTextContentDt
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.mockito.Mockito.when;
 
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 class SimpleTextServiceTest {
 
     @Mock
@@ -33,7 +34,7 @@ class SimpleTextServiceTest {
         WeatherInfoDto weatherInfoDto =
                 new WeatherInfoDto("대전광역시 서구 둔산동", 10.0, 10.0, 10.0);
 
-        when(weatherService.createWeatherInfoDto(weatherDto)).thenReturn(weatherInfoDto);
+        when(weatherService.getWeatherInfoDto(weatherDto)).thenReturn(weatherInfoDto);
 
         SimpleTextContentDto weatherMessage = simpleTextService.createWeatherMessage(weatherDto);
         String weatherMessageText = weatherMessage.getText();
