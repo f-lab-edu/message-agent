@@ -1,4 +1,5 @@
 weather:
+  api: http://apis.data.go.kr
   serviceKey: ${WEATHER_KEY}
   pageNo: 1
   numOfRows: 100
