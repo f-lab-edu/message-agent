@@ -3,8 +3,11 @@ package com.kth.mssage.repository.local;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -24,10 +27,10 @@ public class Local {
     private String regionVillage;
 
     @Column(name = "nx")
-    private  String nx;
+    private String nx;
 
     @Column(name = "ny")
-    private  String ny;
+    private String ny;
 
     @Override
     public boolean equals(Object o) {

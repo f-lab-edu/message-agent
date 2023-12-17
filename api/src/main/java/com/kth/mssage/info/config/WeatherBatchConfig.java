@@ -14,7 +14,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 
 @RequiredArgsConstructor
 @Configuration
-public class WeatherBatchConfig extends DefaultBatchConfiguration {
+public class WeatherBatchConfig {
 
     private final CSVReader reader;
     private final CSVWriter writer;
