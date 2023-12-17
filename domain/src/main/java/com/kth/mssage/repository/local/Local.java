@@ -23,10 +23,10 @@ public class Local {
     @Column(name = "region_village")
     private String regionVillage;
 
-    @Column(name = "nx", nullable = false)
+    @Column(name = "nx")
     private  String nx;
 
-    @Column(name = "ny", nullable = false)
+    @Column(name = "ny")
     private  String ny;
 
     @Override
