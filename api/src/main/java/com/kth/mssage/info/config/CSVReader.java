@@ -1,6 +1,6 @@
 package com.kth.mssage.info.config;
 
-import com.kth.mssage.repository.local.Local;
+import com.kth.mssage.repository.local.Geometry;
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.item.file.FlatFileItemReader;
 import org.springframework.batch.item.file.mapping.BeanWrapperFieldSetMapper;
@@ -15,19 +15,19 @@ import org.springframework.core.io.ClassPathResource;
 public class CSVReader {
 
     @Bean
-    public FlatFileItemReader<Local> csvScheduleReader(){
-        FlatFileItemReader<Local> flatFileItemReader = new FlatFileItemReader<>();
+    public FlatFileItemReader<Geometry> csvScheduleReader(){
+        FlatFileItemReader<Geometry> flatFileItemReader = new FlatFileItemReader<>();
         flatFileItemReader.setResource(new ClassPathResource("weather.csv"));
         flatFileItemReader.setEncoding("UTF-8");
 
-        DefaultLineMapper<Local> defaultLineMapper = new DefaultLineMapper<>();
+        DefaultLineMapper<Geometry> defaultLineMapper = new DefaultLineMapper<>();
 
         DelimitedLineTokenizer delimitedLineTokenizer = new DelimitedLineTokenizer(",");
         delimitedLineTokenizer.setNames("region_city", "region_town", "region_village", "nx", "ny");
         defaultLineMapper.setLineTokenizer(delimitedLineTokenizer);
 
-        BeanWrapperFieldSetMapper<Local> beanWrapperFieldSetMapper = new BeanWrapperFieldSetMapper<>();
-        beanWrapperFieldSetMapper.setTargetType(Local.class);
+        BeanWrapperFieldSetMapper<Geometry> beanWrapperFieldSetMapper = new BeanWrapperFieldSetMapper<>();
+        beanWrapperFieldSetMapper.setTargetType(Geometry.class);
 
         defaultLineMapper.setFieldSetMapper(beanWrapperFieldSetMapper);
 

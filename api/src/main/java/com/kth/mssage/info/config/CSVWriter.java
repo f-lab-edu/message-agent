@@ -1,7 +1,7 @@
 package com.kth.mssage.info.config;
 
-import com.kth.mssage.repository.local.Local;
-import com.kth.mssage.repository.local.LocalRepository;
+import com.kth.mssage.repository.local.Geometry;
+import com.kth.mssage.repository.local.GeometryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.item.Chunk;
 import org.springframework.batch.item.ItemWriter;
@@ -12,16 +12,16 @@ import java.util.List;
 
 @Configuration
 @RequiredArgsConstructor
-public class CSVWriter implements ItemWriter<Local> {
+public class CSVWriter implements ItemWriter<Geometry> {
 
-    private final LocalRepository localRepository;
+    private final GeometryRepository geometryRepository;
 
     @Override
-    public void write(Chunk<? extends Local> locals) {
-        List<Local> localList = new ArrayList<>();
+    public void write(Chunk<? extends Geometry> locals) {
+        List<Geometry> geometryList = new ArrayList<>();
 
-        locals.forEach(localList::add);
+        locals.forEach(geometryList::add);
 
-        localRepository.saveAll(localList);
+        geometryRepository.saveAll(geometryList);
     }
 }

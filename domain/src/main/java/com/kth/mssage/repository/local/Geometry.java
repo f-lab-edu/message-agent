@@ -5,13 +5,14 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+
+import java.util.Objects;
 
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Local {
+public class Geometry {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,16 +37,15 @@ public class Local {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Local that = (Local) o;
+        Geometry that = (Geometry) o;
 
-        String thisConcatenated = regionCity + " " + regionTown + " " + regionVillage;
-        String thatConcatenated = that.regionCity + " " + that.regionTown + " " + that.regionVillage;
-
-        return thisConcatenated.equals(thatConcatenated);
+        return ( (null == regionCity && null == that.regionCity) || (null != regionCity && null != that.regionCity && regionCity.equals(that.regionCity)) )
+                && ( (null == regionTown && null == that.regionTown) || (null != regionTown && null != that.regionTown && regionTown.equals(that.regionTown)) )
+                && ( (null == regionVillage && null == that.regionVillage) || (null != regionVillage && null != that.regionVillage && regionVillage.equals(that.regionVillage)) );
     }
 
     @Override
     public int hashCode() {
-        return (regionCity + " " + regionTown + " " + regionVillage).hashCode();
+        return Objects.hash(regionCity, regionTown, regionVillage);
     }
 }
