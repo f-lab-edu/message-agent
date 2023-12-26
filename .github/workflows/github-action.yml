@@ -22,7 +22,7 @@ jobs:
       - name: set application db
         uses: microsoft/variable-substitution@v1
         with:
-          files: .domain/src/main/resources/application-db.yml
+          files: .message-agent/domain/src/main/resources/application-db.yml
         env:
           spring.datasource.url: ${{ secrets.DB_URL }}
           spring.datasource.username: ${{ secrets.DB_USERNAME }}
@@ -31,14 +31,14 @@ jobs:
       - name: set application weather
         uses: microsoft/variable-substitution@v1
         with:
-          files: .api/src/main/resources/application-weather.yml
+          files: .message-agent/api/src/main/resources/application-weather.yml
         env:
           weather.serviceKey: ${{ secrets.WEATHER_KEY }}
 
       - name: set application weather test
         uses: microsoft/variable-substitution@v1
         with:
-          files: .api/src/test/resources/application-test.yml
+          files: .message-agent/api/src/test/resources/application-test.yml
         env:
           weather.serviceKey: ${{ secrets.WEATHER_KEY }}
 
