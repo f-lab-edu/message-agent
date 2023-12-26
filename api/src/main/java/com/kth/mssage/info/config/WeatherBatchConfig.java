@@ -31,6 +31,7 @@ public class WeatherBatchConfig {
                 .<Geometry, Geometry>chunk(1000, transactionManager)
                 .reader(reader.csvScheduleReader())
                 .writer(writer)
+                .allowStartIfComplete(true)
                 .build();
     }
 
