@@ -19,6 +19,39 @@ jobs:
           java-version: '17'
           distribution: 'corretto'
 
+      - name: set application db
+        uses: microsoft/variable-substitution@v1
+        with:
+          files: .domain/src/main/resources/application-db.yml
+        env:
+          spring.datasource.url: ${{ secrets.DB_URL }}
+          spring.datasource.username: ${{ secrets.DB_USERNAME }}
+          spring.datasource.password: ${{ secrets.DB_PASSWORD }}
+
+      - name: set application weather
+        uses: microsoft/variable-substitution@v1
+        with:
+          files: .api/src/main/resources/application-weather.yml
+        env:
+          weather.serviceKey: ${{ secrets.WEATHER_KEY }}
+
+      - name: set application weather test
+        uses: microsoft/variable-substitution@v1
+        with:
+          files: .api/src/test/resources/application-test.yml
+        env:
+          weather.serviceKey: ${{ secrets.WEATHER_KEY }}
+
+      - name: Setup MySQL
+        uses: mirromutth/mysql-action@v1.1
+        with:
+          host port: 3306
+          container port: 3306
+          mysql version: '8.0'
+          mysql database: ${{secrets.DB_NAME}}
+          mysql user: ${{secrets.DB_USERNAME}}
+          mysql password: ${{secrets.DB_PASSWORD}}
+
       - name: set up gradle
         uses: gradle/gradle-build-action@v2
         with:
