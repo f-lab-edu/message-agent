@@ -20,6 +20,7 @@ jobs:
           distribution: 'corretto'
 
       - name: set application db
+        if: github.event_name == 'push'
         uses: microsoft/variable-substitution@v1
         with:
           files: ./domain/src/main/resources/application-db.yml
@@ -29,6 +30,7 @@ jobs:
           spring.datasource.password: ${{ secrets.DB_PASSWORD }}
 
       - name: set application weather
+        if: github.event_name == 'push'
         uses: microsoft/variable-substitution@v1
         with:
           files: ./api/src/main/resources/application-weather.yml
@@ -36,6 +38,7 @@ jobs:
           weather.serviceKey: ${{ secrets.WEATHER_KEY }}
 
       - name: set application weather test
+        if: github.event_name == 'push'
         uses: microsoft/variable-substitution@v1
         with:
           files: ./api/src/test/resources/application-test.yml
@@ -43,6 +46,7 @@ jobs:
           weather.serviceKey: ${{ secrets.WEATHER_KEY }}
 
       - name: Setup MySQL
+        if: github.event_name == 'push'
         uses: mirromutth/mysql-action@v1.1
         with:
           host port: 3306
@@ -56,3 +60,31 @@ jobs:
         uses: gradle/gradle-build-action@v2
         with:
           arguments: test
+
+      - name: web docker build and push
+        run: |
+          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+          docker build -t ${{ secrets.DOCKER_REPO }}/message-agent
+          docker push ${{ secrets.DOCKER_REPO }}/message-agent
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: NCP login and docker image pull and run
+        if: github.event_name == 'push'
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.NCP_HOST }}
+          username: ${{ secrets.NCP_USERNAME }}
+          password: ${{ secrets.NCP_PASSWORD }}
+          port: ${{ secrets.NCP_PORT }}
+          script: |
+            sudo docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+            sudo docker stop $(sudo docker ps -a -q)
+            sudo docker rm -f $(sudo docker ps -a -q)
+            sudo docker pull ${{ secrets.DOCKER_REPO }}/message-agent
+            sudo docker run -d -p 8080:8080 ${{ secrets.DOCKER_REPO }}/message-agent
+            sudo docker image prune -f
+            ps -ef | grep
