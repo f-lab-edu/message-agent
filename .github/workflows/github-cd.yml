@@ -1,9 +1,7 @@
-name: github-action
+name: github-cd
 on:
   push:
-    branches: [ "main"]
-  pull_request:
-    branches: [ "*" ]
+    branches: [ "main" ]
 
 permissions:
   contents: read
@@ -20,7 +18,6 @@ jobs:
           distribution: 'corretto'
 
       - name: set application db
-        if: github.event_name == 'push'
         uses: microsoft/variable-substitution@v1
         with:
           files: ./domain/src/main/resources/application-db.yml
@@ -30,7 +27,6 @@ jobs:
           spring.datasource.password: ${{ secrets.DB_PASSWORD }}
 
       - name: set application weather
-        if: github.event_name == 'push'
         uses: microsoft/variable-substitution@v1
         with:
           files: ./api/src/main/resources/application-weather.yml
@@ -38,7 +34,6 @@ jobs:
           weather.serviceKey: ${{ secrets.WEATHER_KEY }}
 
       - name: set application weather test
-        if: github.event_name == 'push'
         uses: microsoft/variable-substitution@v1
         with:
           files: ./api/src/test/resources/application-test.yml
@@ -46,7 +41,6 @@ jobs:
           weather.serviceKey: ${{ secrets.WEATHER_KEY }}
 
       - name: Setup MySQL
-        if: github.event_name == 'push'
         uses: mirromutth/mysql-action@v1.1
         with:
           host port: 3306
@@ -62,7 +56,6 @@ jobs:
           arguments: test
 
       - name: web docker build and push
-        if: github.event_name == 'push'
         run: |
           docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
           docker build -t ${{ secrets.DOCKER_REPO }}/message-agent
@@ -74,7 +67,6 @@ jobs:
 
     steps:
       - name: NCP login and docker image pull and run
-        if: github.event_name == 'push'
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.NCP_HOST }}
