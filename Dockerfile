@@ -1,5 +1,5 @@
 FROM openjdk:17
 EXPOSE 8080
-ARG JAR_FILE=/build/libs/*.jar
-COPY ${JAR_FILE} app.jar
+WORKDIR /app
+COPY api/build/libs/*.jar app.jar
 ENTRYPOINT ["java","-jar","-Dspring.profiles.active=dev","/app.jar"]
