@@ -69,13 +69,21 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Build and push
+      - name: Build and push API Docker image
         uses: docker/build-push-action@v5
         with:
-          context: .
-          file: ./Dockerfile
+          context: ./api
+          file: ./api/Dockerfile
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/message-agent:latest
+          tags: ${{ secrets.DOCKER_USERNAME }}/api-module:latest
+
+      - name: Build and push Domain Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./domain
+          file: ./domain/Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKER_USERNAME }}/domain-module:latest
 
   deploy:
     needs: build
