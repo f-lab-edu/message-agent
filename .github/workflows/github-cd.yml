@@ -72,16 +72,16 @@ jobs:
       - name: Build and push API Docker image
         uses: docker/build-push-action@v5
         with:
-          context: ./api
-          file: ./api/Dockerfile .
+          context: .
+          file: ./api/Dockerfile
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/api-module:latest
 
       - name: Build and push Domain Docker image
         uses: docker/build-push-action@v5
         with:
-          context: ./domain
-          file: ./domain/Dockerfile .
+          context: .
+          file: ./domain/Dockerfile
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/domain-module:latest
 
