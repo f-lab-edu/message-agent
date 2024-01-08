@@ -60,11 +60,6 @@ jobs:
           name: api-artifact
           path: ./api/build/libs/api.jar
 
-      - uses: actions/upload-artifact@v3
-        with:
-          name: domain-artifact
-          path: ./domain/build/libs/domain.jar
-
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
@@ -84,17 +79,6 @@ jobs:
           file: ./api/Dockerfile
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/api-module:latest
-
-      - name: List DOMAIN directory contents
-        run: ls -l ./domain/build/libs
-
-      - name: Build and push Domain Docker image
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          file: ./domain/Dockerfile
-          push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/domain-module:latest
 
   deploy:
     needs: build
