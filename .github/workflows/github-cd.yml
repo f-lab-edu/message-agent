@@ -73,7 +73,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: ./api
-          file: ./api/Dockerfile
+          file: ./api/Dockerfile .
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/api-module:latest
 
@@ -81,7 +81,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: ./domain
-          file: ./domain/Dockerfile
+          file: ./domain/Dockerfile .
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/domain-module:latest
 
