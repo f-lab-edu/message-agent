@@ -6,6 +6,8 @@ import com.kth.mssage.info.web.dto.info.WeatherInfoDto;
 import com.kth.mssage.info.web.dto.request.skill.WeatherDto;
 import com.kth.mssage.repository.local.Geometry;
 import com.kth.mssage.repository.local.GeometryRepository;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONArray;
@@ -84,11 +86,12 @@ public class WeatherService {
     }
 
     private String getBaseDate() {
-        return LocalDateTime.now().format(DateTimeFormatter.ofPattern(BASE_DATE_PATTERN));
+        return ZonedDateTime.now(ZoneId.of("Asia/Seoul")).toLocalDateTime()
+            .format(DateTimeFormatter.ofPattern(BASE_DATE_PATTERN));
     }
 
     private String getBaseTime() {
-        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime now = ZonedDateTime.now(ZoneId.of("Asia/Seoul")).toLocalDateTime();
         return now.minusHours(now.getMinute() < 40 ? 1 : 0).format(DateTimeFormatter.ofPattern(BASE_TIME));
     }
 
