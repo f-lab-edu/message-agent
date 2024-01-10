@@ -97,5 +97,6 @@ jobs:
             sudo docker stop $(sudo docker ps -a -q)
             sudo docker rm -f $(sudo docker ps -a -q)
             sudo docker pull "${{ secrets.DOCKER_REPO }}/api-module"
-            sudo docker run -d -p 8080:8080 "${{ secrets.DOCKER_REPO }}/api-module"
+            sudo docker run -d --name mysql-container --network my-network -e MYSQL_ROOT_PASSWORD=${{secrets.DB_PASSWORD}} mysql:latest 
+            sudo docker run -d --name api-module-container --network my-network -p 8080:8080 "${{ secrets.DOCKER_REPO }}/api-module"
             sudo docker image prune -f
