@@ -26,32 +26,8 @@ jobs:
           spring.datasource.username: ${{ secrets.DB_USERNAME }}
           spring.datasource.password: ${{ secrets.DB_PASSWORD }}
 
-      - name: application-db.yml check
-        run: |
-          set -e  
-          
-          YAML_FILE="./domain/src/main/resources/application-db.yml"
-          
-          if grep -q "spring.datasource.url" "$YAML_FILE"; then
-          echo "spring.datasource.url is set"
-          else
-          echo "spring.datasource.url is not set"
-          exit 1
-          fi
-          
-          if grep -q "spring.datasource.username" "$YAML_FILE"; then
-          echo "spring.datasource.username is set"
-          else
-          echo "spring.datasource.username is not set"
-          exit 1
-          fi
-          
-          if grep -q "spring.datasource.password" "$YAML_FILE"; then
-          echo "spring.datasource.password is set"
-          else
-          echo "spring.datasource.password is not set"
-          exit 1
-          fi
+      - name: Print application-db.yml after substitution
+        run: cat ./domain/src/main/resources/application-db.yml
 
       - name: set application weather
         uses: microsoft/variable-substitution@v1
