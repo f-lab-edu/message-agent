@@ -1,6 +1,22 @@
+spring:
+  config:
+    activate:
+      on-profile: local
 weather:
   api: http://apis.data.go.kr
   serviceKey: ${WEATHER_KEY}
+  pageNo: 1
+  numOfRows: 100
+  dataType: JSON
+
+---
+spring:
+  config:
+    activate:
+      on-profile: dev
+weather:
+  api: http://apis.data.go.kr
+  serviceKey: __weather.serviceKey__
   pageNo: 1
   numOfRows: 100
   dataType: JSON

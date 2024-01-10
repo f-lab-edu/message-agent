@@ -2,7 +2,11 @@ spring:
   profiles:
     active: dev
     group:
+      local:
+        - weather
+        - db-local
       dev:
         - weather
+        - db-dev
     include:
       - db
