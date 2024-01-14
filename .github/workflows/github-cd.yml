@@ -85,21 +85,19 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: NCP login and docker image pull and run
+      - name: NCP login and docker compose run
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.NCP_HOST }}
           username: ${{ secrets.NCP_USERNAME }}
           password: ${{ secrets.NCP_PASSWORD }}
           port: ${{ secrets.NCP_PORT }}
-
-      - name: Deploy with Docker Compose
-        run: |
-          sudo docker login -u "${{ secrets.DOCKER_USERNAME }}" -p "${{ secrets.DOCKER_PASSWORD }}"
-          sudo docker-compose -f docker-compose.yml down
-          sudo docker-compose -f docker-compose.yml pull
-          sudo docker-compose -f docker-compose.yml up -d
-          sudo docker image prune -f
+          script: |
+            sudo docker login -u "${{ secrets.DOCKER_USERNAME }}" -p "${{ secrets.DOCKER_PASSWORD }}"
+            sudo docker-compose -f ./docker-compose.yml down
+            sudo docker-compose -f ./docker-compose.yml pull
+            sudo docker-compose -f ./docker-compose.yml up -d
+            sudo docker image prune -f
         env:
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}

@@ -12,7 +12,7 @@ services:
     networks:
       - my-network
 
-  api-module:
+  api-module-container:
     image: "${DOCKER_USERNAME}/api-module:latest"
     ports:
       - "8080:8080"
