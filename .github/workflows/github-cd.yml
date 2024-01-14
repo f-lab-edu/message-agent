@@ -92,11 +92,14 @@ jobs:
           username: ${{ secrets.NCP_USERNAME }}
           password: ${{ secrets.NCP_PASSWORD }}
           port: ${{ secrets.NCP_PORT }}
-          script: |
-            sudo docker login -u "${{ secrets.DOCKER_USERNAME }}" -p "${{ secrets.DOCKER_PASSWORD }}"
-            sudo docker stop $(sudo docker ps -a -q)
-            sudo docker rm -f $(sudo docker ps -a -q)
-            sudo docker pull "${{ secrets.DOCKER_REPO }}/api-module"
-            sudo docker run -d --rm --name mysql-container --network my-network -e MYSQL_ROOT_PASSWORD=${{secrets.DB_PASSWORD}} mysql:latest 
-            sudo docker run -d --rm --name api-module-container --network my-network -p 8080:8080 "${{ secrets.DOCKER_REPO }}/api-module"
-            sudo docker image prune -f
+
+      - name: Deploy with Docker Compose
+        run: |
+          sudo docker login -u "${{ secrets.DOCKER_USERNAME }}" -p "${{ secrets.DOCKER_PASSWORD }}"
+          sudo docker-compose -f docker-compose.yml down
+          sudo docker-compose -f docker-compose.yml pull
+          sudo docker-compose -f docker-compose.yml up -d
+          sudo docker image prune -f
+        env:
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
