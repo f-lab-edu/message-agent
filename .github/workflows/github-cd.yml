@@ -95,9 +95,9 @@ jobs:
           port: ${{ secrets.NCP_PORT }}
           script: |
             sudo docker login -u "${{ secrets.DOCKER_USERNAME }}" -p "${{ secrets.DOCKER_PASSWORD }}"
-            sudo docker-compose -f docker-compose.yml down
+            sudo docker-compose -f ./api/docker-compose.yml down
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}
-            sudo docker-compose -f docker-compose.yml up -d
+            sudo docker-compose -f ./api/docker-compose.yml up -d
             sudo docker image prune -f
         env:
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
