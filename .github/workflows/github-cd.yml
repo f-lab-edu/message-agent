@@ -85,6 +85,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - uses: actions/checkout@v3
       - name: NCP login and docker compose run
         uses: appleboy/ssh-action@master
         with:
@@ -94,7 +95,7 @@ jobs:
           port: ${{ secrets.NCP_PORT }}
           script: |
             sudo docker login -u "${{ secrets.DOCKER_USERNAME }}" -p "${{ secrets.DOCKER_PASSWORD }}"
-            sudo docker rm -f $(sudo docker ps -qa)
+            sudo docker-compose -f docker-compose.yml down
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}
             sudo docker-compose -f docker-compose.yml up -d
             sudo docker image prune -f
