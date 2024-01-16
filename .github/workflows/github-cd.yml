@@ -17,27 +17,17 @@ jobs:
           java-version: '17'
           distribution: 'corretto'
 
-      - name: set application db
+      - name: set application configurations
         uses: microsoft/variable-substitution@v1
         with:
-          files: ./domain/src/main/resources/application-db.yml
+          files: |
+            ./domain/src/main/resources/application-db.yml
+            ./api/src/main/resources/application-weather.yml
+            ./api/src/test/resources/application-test.yml
         env:
           spring.datasource.url: ${{ secrets.DB_URL }}
           spring.datasource.username: ${{ secrets.DB_USERNAME }}
           spring.datasource.password: ${{ secrets.DB_PASSWORD }}
-
-      - name: set application weather
-        uses: microsoft/variable-substitution@v1
-        with:
-          files: ./api/src/main/resources/application-weather.yml
-        env:
-          weather.serviceKey: ${{ secrets.WEATHER_KEY }}
-
-      - name: set application weather test
-        uses: microsoft/variable-substitution@v1
-        with:
-          files: ./api/src/test/resources/application-test.yml
-        env:
           weather.serviceKey: ${{ secrets.WEATHER_KEY }}
 
       - name: Setup MySQL
@@ -94,10 +84,10 @@ jobs:
           password: ${{ secrets.NCP_PASSWORD }}
           port: ${{ secrets.NCP_PORT }}
           script: |
-            sudo docker login -u "${{ secrets.DOCKER_USERNAME }}" -p "${{ secrets.DOCKER_PASSWORD }}"
-            sudo docker-compose -f ./api/docker-compose.yml down
+            sudo docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin "${{ secrets.DOCKER_PASSWORD }}"
+            sudo docker-compose -f docker-compose.yml down
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}
-            sudo docker-compose -f ./api/docker-compose.yml up -d
+            sudo docker-compose -f docker-compose.yml up -d
             sudo docker image prune -f
         env:
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
