@@ -17,17 +17,27 @@ jobs:
           java-version: '17'
           distribution: 'corretto'
 
-      - name: set application configurations
+      - name: set application db
         uses: microsoft/variable-substitution@v1
         with:
-          files: |
-            ./domain/src/main/resources/application-db.yml
-            ./api/src/main/resources/application-weather.yml
-            ./api/src/test/resources/application-test.yml
+          files: ./domain/src/main/resources/application-db.yml
         env:
           spring.datasource.url: ${{ secrets.DB_URL }}
           spring.datasource.username: ${{ secrets.DB_USERNAME }}
           spring.datasource.password: ${{ secrets.DB_PASSWORD }}
+
+      - name: set application weather
+        uses: microsoft/variable-substitution@v1
+        with:
+          files: ./api/src/main/resources/application-weather.yml
+        env:
+          weather.serviceKey: ${{ secrets.WEATHER_KEY }}
+
+      - name: set application weather test
+        uses: microsoft/variable-substitution@v1
+        with:
+          files: ./api/src/test/resources/application-test.yml
+        env:
           weather.serviceKey: ${{ secrets.WEATHER_KEY }}
 
       - name: Setup MySQL
