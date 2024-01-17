@@ -89,7 +89,6 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     needs: build
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
 
     steps:
       - uses: actions/checkout@v3
@@ -104,7 +103,6 @@ jobs:
             ${{ runner.os }}-gradle-
 
       - name: Copy Docker Compose File to Server
-        if: contains(github.event.head_commit.modified, 'docker-compose.yml')
         uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.SERVER_IP }}
