@@ -114,9 +114,6 @@ jobs:
 
       - name: NCP login and docker compose run
         uses: appleboy/ssh-action@master
-        env:
-          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
         with:
           host: ${{ secrets.NCP_HOST }}
           username: ${{ secrets.NCP_USERNAME }}
@@ -124,11 +121,9 @@ jobs:
           port: ${{ secrets.NCP_PORT }}
           envs: DB_PASSWORD,DOCKER_USERNAME
           script: |
-            export DB_PASSWORD=$DB_PASSWORD
-            export DOCKER_USERNAME=$DOCKER_USERNAME
             echo "${{ secrets.DOCKER_PASSWORD }}" | sudo docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
             cd /home/${{ secrets.NCP_USERNAME }}
             sudo docker-compose -f docker-compose.yml down
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}
-            sudo docker-compose -f docker-compose.yml up -d
+            sudo DB_PASSWORD=${{ secrets.DB_PASSWORD }} DOCKER_USERNAME=${{ secrets.DOCKER_USERNAME }} docker-compose -f docker-compose.yml up -d
             sudo docker image prune -f          
