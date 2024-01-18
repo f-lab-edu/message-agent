@@ -114,9 +114,6 @@ jobs:
 
       - name: NCP login and docker compose run
         uses: appleboy/ssh-action@v1.0.3
-        env:
-          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
         with:
           host: ${{ secrets.NCP_HOST }}
           username: ${{ secrets.NCP_USERNAME }}
@@ -124,7 +121,9 @@ jobs:
           port: ${{ secrets.NCP_PORT }}
           script: |
             echo "${{ secrets.DOCKER_PASSWORD }}" | sudo docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
-            cd /home/${{ secrets.NCP_USERNAME }}            
+            cd /home/${{ secrets.NCP_USERNAME }}   
+            echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" > .env
+            echo "DOCKER_USERNAME=${{ secrets.DOCKER_USERNAME }}" >> .env
             sudo docker-compose -f docker-compose.yml down
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}
             sudo DB_PASSWORD=${{ secrets.DB_PASSWORD }} DOCKER_USERNAME=${{ secrets.DOCKER_USERNAME }} docker-compose -f docker-compose.yml up -d
