@@ -16,8 +16,8 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EntityScan(basePackages = {"com.kth.mssage.repository"})
 @EnableJpaRepositories(basePackages = "com.kth.mssage.repository")
 @SpringBootApplication(scanBasePackages = {"com.kth"})
-public class MessageApplication {
+public class MessageApiApplication {
     public static void main(String[] args) {
-        SpringApplication.run(MessageApplication.class, args);
+        SpringApplication.run(MessageApiApplication.class, args);
     }
 }

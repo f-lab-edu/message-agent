@@ -1,5 +1,7 @@
 package com.kth.mssage.info.web.dto.info;
 
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
@@ -19,7 +21,7 @@ public class WeatherInfoDto {
         this.temp = temp;
         this.rainAmount = rainAmount;
         this.humid = humid;
-        this.lastUpdateTime = LocalDateTime.now().format(
+        this.lastUpdateTime = ZonedDateTime.now(ZoneId.of("Asia/Seoul")).toLocalDateTime().format(
                 DateTimeFormatter.ofPattern("yyyy년 MM월 dd일(E) HH:mm")
         );
     }

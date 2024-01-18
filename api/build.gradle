@@ -18,6 +18,9 @@ dependencyManagement {
     }
 }
 
+jar{
+    enabled = false
+}
 
 dependencies {
     implementation project(':domain')
