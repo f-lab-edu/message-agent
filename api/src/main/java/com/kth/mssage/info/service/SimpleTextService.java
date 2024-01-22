@@ -8,6 +8,7 @@ import com.kth.mssage.info.web.dto.request.skill.WeatherDto;
 import com.kth.mssage.info.web.dto.response.TemplateDto;
 import com.kth.mssage.info.web.dto.response.skill.simpletext.SimpleTextContentDto;
 import com.kth.mssage.info.web.dto.response.skill.simpletext.SimpleTextDto;
+import java.util.concurrent.CompletableFuture;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,26 +18,27 @@ public class SimpleTextService {
 
     private final WeatherService weatherService;
 
-    public TemplateDto<SimpleTextDto> createMessage(RequestActionDto<ParamDto> requestActionDto) {
+    public CompletableFuture<TemplateDto<SimpleTextDto>> createMessage(RequestActionDto<ParamDto> requestActionDto) {
         return checkMessageType(requestActionDto);
     }
 
-    private TemplateDto<SimpleTextDto> checkMessageType(RequestActionDto<ParamDto> requestActionDto) {
-        if (requestActionDto.findTypeParamDto() instanceof WeatherDto weatherDto) {
-            SimpleTextContentDto weatherMessage = createWeatherMessage(weatherDto);
-            return setUpTextMessage(weatherMessage);
-        }
+    private CompletableFuture<TemplateDto<SimpleTextDto>> checkMessageType(RequestActionDto<ParamDto> requestActionDto) {
+		if (requestActionDto.findTypeParamDto() instanceof WeatherDto weatherDto) {
+			return createWeatherMessage(weatherDto)
+				.thenApply(this::setUpTextMessage);
+		}
 
-        //TODO: 임시 값 지정
-        return null;
+		//TODO: 임시 값 지정
+		return CompletableFuture.completedFuture(null);
     }
 
-    public SimpleTextContentDto createWeatherMessage(WeatherDto weatherDto) {
-        WeatherInfoDto weatherInfoDto = weatherService.getWeatherInfoDto(weatherDto);
-
-        return SimpleTextContentDto.builder()
-                .text(createWeatherTextString(weatherInfoDto))
-                .build();
+    public CompletableFuture<SimpleTextContentDto> createWeatherMessage(WeatherDto weatherDto) {
+        return weatherService.getWeatherInfoDto(weatherDto)
+            .thenApply(this::createWeatherTextString)
+            .thenApply(text -> SimpleTextContentDto.builder()
+                .text(text)
+                .build()
+            );
     }
 
     private String createWeatherTextString(WeatherInfoDto weatherInfoDto) {

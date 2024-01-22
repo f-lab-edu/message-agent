@@ -5,6 +5,7 @@ import com.kth.mssage.info.web.dto.request.ParamDto;
 import com.kth.mssage.info.web.dto.request.RequestActionDto;
 import com.kth.mssage.info.web.dto.response.ResponseResultDto;
 import com.kth.mssage.info.web.dto.response.skill.simpletext.SimpleTextDto;
+import java.util.concurrent.CompletableFuture;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +19,9 @@ public class SimpleTextController {
 
     @ResponseStatus(value = HttpStatus.OK)
     @PostMapping("/message")
-    public ResponseResultDto<SimpleTextDto> requestMessageInfo(@RequestBody RequestActionDto<ParamDto> requestActionDto) {
-        return ResponseResultDto.createResultMessage(simpleTextService.createMessage(requestActionDto));
+    public CompletableFuture<ResponseResultDto<SimpleTextDto>> requestMessageInfo(
+        @RequestBody RequestActionDto<ParamDto> requestActionDto) {
+        return simpleTextService.createMessage(requestActionDto)
+            .thenApply(ResponseResultDto::createResultMessage);
     }
 }
