@@ -4,6 +4,7 @@ import com.kth.mssage.info.service.weather.WeatherService;
 import com.kth.mssage.info.web.dto.info.WeatherInfoDto;
 import com.kth.mssage.info.web.dto.request.skill.WeatherDto;
 import com.kth.mssage.info.web.dto.response.skill.simpletext.SimpleTextContentDto;
+import java.util.concurrent.CompletableFuture;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -34,9 +35,10 @@ class SimpleTextServiceTest {
         WeatherInfoDto weatherInfoDto =
                 new WeatherInfoDto("대전광역시 서구 둔산동", 10.0, 10.0, 10.0);
 
-        when(weatherService.getWeatherInfoDto(weatherDto)).thenReturn(weatherInfoDto);
+        when(weatherService.getWeatherInfoDto(weatherDto)).thenReturn(
+            CompletableFuture.completedFuture(weatherInfoDto));
 
-        SimpleTextContentDto weatherMessage = simpleTextService.createWeatherMessage(weatherDto);
+        SimpleTextContentDto weatherMessage = simpleTextService.createWeatherMessage(weatherDto).join();
         String weatherMessageText = weatherMessage.getText();
 
         Assertions.assertEquals(weatherMessageText, "대전광역시 서구 둔산동 \n현재 온도: 10.0°C \n" +
