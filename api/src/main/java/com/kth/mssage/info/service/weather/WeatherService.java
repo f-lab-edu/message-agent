@@ -14,6 +14,7 @@ import java.util.concurrent.CompletableFuture;
 import lombok.RequiredArgsConstructor;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
@@ -27,6 +28,7 @@ public class WeatherService {
 	private final WeatherApiClient weatherApiClient;
 	private final GeometryRepository geometryRepository;
 
+	@Async
 	public CompletableFuture<WeatherInfoDto> getWeatherInfoDto(WeatherDto weatherDto) {
 		String location = weatherDto.getLocation();
 
