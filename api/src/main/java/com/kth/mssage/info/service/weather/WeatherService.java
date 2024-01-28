@@ -1,6 +1,5 @@
 package com.kth.mssage.info.service.weather;
 
-import com.kth.mssage.info.client.WeatherApiClient;
 import com.kth.mssage.info.properties.WeatherProperties;
 import com.kth.mssage.info.web.dto.info.WeatherInfoDto;
 import com.kth.mssage.info.web.dto.request.skill.WeatherDto;
@@ -10,31 +9,37 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.concurrent.CompletableFuture;
-import lombok.RequiredArgsConstructor;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 
-@RequiredArgsConstructor
 @Service
 public class WeatherService {
 
 	private final static String BASE_DATE_PATTERN = "yyyyMMdd";
 	private final static String BASE_TIME = "HH'00'";
 
+	private final WebClient webClient;
 	private final WeatherProperties weatherProperties;
-	private final WeatherApiClient weatherApiClient;
 	private final GeometryRepository geometryRepository;
 
+	public WeatherService(WebClient.Builder webClientBuilder, WeatherProperties weatherProperties, GeometryRepository geometryRepository) {
+		this.webClient = webClientBuilder.baseUrl("http://apis.data.go.kr").build();
+		this.weatherProperties = weatherProperties;
+		this.geometryRepository = geometryRepository;
+	}
+
 	@Async
-	public CompletableFuture<WeatherInfoDto> getWeatherInfoDto(WeatherDto weatherDto) {
+	public Mono<WeatherInfoDto> getWeatherInfoDto(WeatherDto weatherDto) {
 		String location = weatherDto.getLocation();
 
 		Geometry geometry = findByGeometryByLocation(location);
 
-		return getWeatherInfo(geometry.getNx(), geometry.getNy()).thenApply(weatherInfo -> {
+		return getWeatherInfo(geometry.getNx(), geometry.getNy())
+			.map(weatherInfo -> {
 				JSONObject jsonObject = new JSONObject(weatherInfo);
 				JSONArray jsonArray = jsonObject.getJSONObject("response")
 					.getJSONObject("body")
@@ -71,20 +76,23 @@ public class WeatherService {
 		return geometryRepository.findByRegionCityAndRegionTownAndRegionVillage(regionCity, regionTown, regionVillage);
 	}
 
-	private CompletableFuture<String> getWeatherInfo(String nx, String ny) {
-		return CompletableFuture.supplyAsync(() ->
-			weatherApiClient.getWeatherInfo(
-				weatherProperties.getServiceKey(),
-				weatherProperties.getNumOfRows(),
-				weatherProperties.getPageNo(),
-				weatherProperties.getDataType(),
-				getBaseDate(),
-				getBaseTime(),
-				nx,
-				ny
-			)
-		);
+	public Mono<String> getWeatherInfo(String nx, String ny) {
+		return webClient.get()
+			.uri(uriBuilder -> uriBuilder
+				.path("/1360000/VilageFcstInfoService_2.0/getUltraSrtNcst")
+				.queryParam("serviceKey", weatherProperties.getServiceKey())
+				.queryParam("numOfRows", weatherProperties.getNumOfRows())
+				.queryParam("pageNo", weatherProperties.getPageNo())
+				.queryParam("dataType", weatherProperties.getDataType())
+				.queryParam("base_date", getBaseDate())
+				.queryParam("base_time", getBaseTime())
+				.queryParam("nx", nx)
+				.queryParam("ny", ny)
+				.build())
+			.retrieve()
+			.bodyToMono(String.class);
 	}
+
 
 	private String getBaseDate() {
 		return ZonedDateTime.now(ZoneId.of("Asia/Seoul")).toLocalDateTime()

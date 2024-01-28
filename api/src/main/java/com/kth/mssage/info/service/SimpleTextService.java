@@ -11,6 +11,7 @@ import com.kth.mssage.info.web.dto.response.skill.simpletext.SimpleTextDto;
 import java.util.concurrent.CompletableFuture;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Mono;
 
 @RequiredArgsConstructor
 @Service
@@ -18,27 +19,27 @@ public class SimpleTextService {
 
     private final WeatherService weatherService;
 
-    public CompletableFuture<TemplateDto<SimpleTextDto>> createMessage(RequestActionDto<ParamDto> requestActionDto) {
+    public Mono<TemplateDto<SimpleTextDto>> createMessage(RequestActionDto<ParamDto> requestActionDto) {
         return checkMessageType(requestActionDto);
     }
 
-    private CompletableFuture<TemplateDto<SimpleTextDto>> checkMessageType(RequestActionDto<ParamDto> requestActionDto) {
+    private Mono<TemplateDto<SimpleTextDto>> checkMessageType(RequestActionDto<ParamDto> requestActionDto) {
 		if (requestActionDto.findTypeParamDto() instanceof WeatherDto weatherDto) {
 			return createWeatherMessage(weatherDto)
-				.thenApply(this::setUpTextMessage);
+				.map(this::setUpTextMessage);
 		}
 
 		//TODO: 임시 값 지정
-		return CompletableFuture.completedFuture(null);
+		return Mono.empty();
     }
 
-    public CompletableFuture<SimpleTextContentDto> createWeatherMessage(WeatherDto weatherDto) {
+    public Mono<SimpleTextContentDto> createWeatherMessage(WeatherDto weatherDto) {
         return weatherService.getWeatherInfoDto(weatherDto)
-            .thenApply(this::createWeatherTextString)
-            .thenApply(text -> SimpleTextContentDto.builder()
-                .text(text)
-                .build()
-            );
+			.map(this::createWeatherTextString)
+			.map(text -> SimpleTextContentDto.builder()
+				.text(text)
+				.build()
+			);
     }
 
     private String createWeatherTextString(WeatherInfoDto weatherInfoDto) {

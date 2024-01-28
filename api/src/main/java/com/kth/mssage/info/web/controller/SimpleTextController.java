@@ -9,6 +9,7 @@ import java.util.concurrent.CompletableFuture;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Mono;
 
 @RequiredArgsConstructor
 @RequestMapping("/simple-text")
@@ -19,9 +20,9 @@ public class SimpleTextController {
 
     @ResponseStatus(value = HttpStatus.OK)
     @PostMapping("/message")
-    public CompletableFuture<ResponseResultDto<SimpleTextDto>> requestMessageInfo(
+    public Mono<ResponseResultDto<SimpleTextDto>> requestMessageInfo(
         @RequestBody RequestActionDto<ParamDto> requestActionDto) {
         return simpleTextService.createMessage(requestActionDto)
-            .thenApply(ResponseResultDto::createResultMessage);
+            .map(ResponseResultDto::createResultMessage);
     }
 }

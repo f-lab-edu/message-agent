@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import reactor.core.publisher.Mono;
 
 import static org.mockito.Mockito.when;
 
@@ -36,9 +37,9 @@ class SimpleTextServiceTest {
                 new WeatherInfoDto("대전광역시 서구 둔산동", 10.0, 10.0, 10.0);
 
         when(weatherService.getWeatherInfoDto(weatherDto)).thenReturn(
-            CompletableFuture.completedFuture(weatherInfoDto));
+            Mono.just(weatherInfoDto));
 
-        SimpleTextContentDto weatherMessage = simpleTextService.createWeatherMessage(weatherDto).join();
+        SimpleTextContentDto weatherMessage = simpleTextService.createWeatherMessage(weatherDto).block();
         String weatherMessageText = weatherMessage.getText();
 
         Assertions.assertEquals(weatherMessageText, "대전광역시 서구 둔산동 \n현재 온도: 10.0°C \n" +

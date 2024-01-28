@@ -17,6 +17,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
+import reactor.core.publisher.Mono;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -50,7 +51,7 @@ public class SimpleTextControllerTest {
                 .build();
 
         when(simpleTextService.createWeatherMessage(weatherDto)).thenReturn(
-            CompletableFuture.completedFuture(simpleTextContentDto));
+            Mono.just(simpleTextContentDto));
 
         SimpleTextDto simpleTextDto = SimpleTextDto.builder()
                 .simpleText(simpleTextContentDto)
@@ -62,7 +63,7 @@ public class SimpleTextControllerTest {
         templateDto.addOutput(simpleTextDto);
 
         when(simpleTextService.createMessage(any())).thenReturn(
-            CompletableFuture.completedFuture(templateDto));
+            Mono.just(templateDto));
 
         String jsonRequest = JsonReader.readJsonFile("__files/payload/chatbot-weather-message-request.json");
         log.info("jsonRequest = {}", jsonRequest);
