@@ -13,11 +13,12 @@ jar{
 }
 
 dependencies {
-    implementation project(':domain')
-    implementation project(':infra')
+    implementation project(':domain:entity')
+    implementation project(':domain:common')
 
     annotationProcessor 'org.projectlombok:lombok'
 
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
     implementation 'org.apache.commons:commons-csv:1.10.0'
     implementation 'org.json:json:20231013'
@@ -26,6 +27,9 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-cache'
     implementation 'com.github.ben-manes.caffeine:caffeine'
     implementation 'org.springframework.batch:spring-batch-core'
+
+    runtimeOnly 'com.mysql:mysql-connector-j'
+    runtimeOnly 'com.h2database:h2'
 
     testAnnotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
