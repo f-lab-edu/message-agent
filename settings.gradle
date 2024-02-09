@@ -1,4 +1,11 @@
 rootProject.name = 'message-agent'
 include 'domain'
-include 'infra'
 include 'api'
+include 'module-api'
+include 'module-api:weather-message-api'
+include 'module-domain'
+include 'module-domain:geometry-domain'
+include 'module-database'
+include 'module-database:database-mysql'
+include 'module-database:mysql-database'
+
