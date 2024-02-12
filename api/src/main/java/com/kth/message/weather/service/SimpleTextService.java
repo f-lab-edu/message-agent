@@ -18,18 +18,10 @@ public class SimpleTextService {
 
     private final WeatherService weatherService;
 
-    public Mono<TemplateDto<SimpleTextDto>> createMessage(RequestActionDto<ParamDto> requestActionDto) {
-        return checkMessageType(requestActionDto);
-    }
-
-    private Mono<TemplateDto<SimpleTextDto>> checkMessageType(RequestActionDto<ParamDto> requestActionDto) {
-		if (requestActionDto.findTypeParamDto() instanceof WeatherDto weatherDto) {
-			return createWeatherMessage(weatherDto)
-				.map(this::setUpTextMessage);
-		}
-
-		//TODO: 임시 값 지정
-		return Mono.empty();
+    public Mono<TemplateDto> createMessage(RequestActionDto requestActionDto) {
+		WeatherDto weatherDto = requestActionDto.findWeatherLocation();
+        return createWeatherMessage(weatherDto)
+			.map(this::setUpTextMessage);
     }
 
     public Mono<SimpleTextContentDto> createWeatherMessage(WeatherDto weatherDto) {
@@ -49,13 +41,12 @@ public class SimpleTextService {
                 "현재 시간: " + weatherInfoDto.getLastUpdateTime();
     }
 
-    private TemplateDto<SimpleTextDto> setUpTextMessage(SimpleTextContentDto textContent) {
+    private TemplateDto setUpTextMessage(SimpleTextContentDto textContent) {
         SimpleTextDto simpleTextDto = SimpleTextDto.builder()
                 .simpleText(textContent)
                 .build();
 
-        TemplateDto<SimpleTextDto> templateDto = TemplateDto.<SimpleTextDto>builder()
-                .build();
+        TemplateDto templateDto = TemplateDto.builder().build();
 
         templateDto.addOutput(simpleTextDto);
 

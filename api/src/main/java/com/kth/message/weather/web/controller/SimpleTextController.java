@@ -19,8 +19,8 @@ public class SimpleTextController {
 
     @ResponseStatus(value = HttpStatus.OK)
     @PostMapping("/message")
-    public Mono<ResponseResultDto<SimpleTextDto>> requestMessageInfo(
-        @RequestBody RequestActionDto<ParamDto> requestActionDto) {
+    public Mono<ResponseResultDto> requestMessageInfo(
+        @RequestBody RequestActionDto requestActionDto) {
         return simpleTextService.createMessage(requestActionDto)
             .map(ResponseResultDto::createResultMessage);
     }

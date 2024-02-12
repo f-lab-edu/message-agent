@@ -7,16 +7,13 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class ActionDto<T extends ParamDto> {
+public class ActionDto {
 
-    private final T paramDto;
+    private final ParamDto paramDto;
 
     @JsonCreator
-    public ActionDto(@JsonProperty("params") T paramDto) {
+    public ActionDto(@JsonProperty("params") ParamDto paramDto) {
         this.paramDto = paramDto;
     }
 
-    public T checkType() {
-        return paramDto;
-    }
 }
