@@ -1,10 +1,8 @@
 package com.kth.message.weather.web.controller;
 
+import com.kth.message.dto.weather.request.RequestActionDto;
+import com.kth.message.dto.weather.response.ResponseResultDto;
 import com.kth.message.weather.service.SimpleTextService;
-import com.kth.message.weather.web.dto.request.ParamDto;
-import com.kth.message.weather.web.dto.response.ResponseResultDto;
-import com.kth.message.weather.web.dto.response.skill.simpletext.SimpleTextDto;
-import com.kth.message.weather.web.dto.request.RequestActionDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;

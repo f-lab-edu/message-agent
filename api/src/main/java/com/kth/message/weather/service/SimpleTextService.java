@@ -1,13 +1,12 @@
 package com.kth.message.weather.service;
 
+import com.kth.message.dto.weather.WeatherInfoDto;
+import com.kth.message.dto.weather.request.RequestActionDto;
+import com.kth.message.dto.weather.request.WeatherDto;
+import com.kth.message.dto.weather.response.SimpleTextContentDto;
+import com.kth.message.dto.weather.response.SimpleTextDto;
+import com.kth.message.dto.weather.response.TemplateDto;
 import com.kth.message.weather.service.weather.WeatherService;
-import com.kth.message.weather.web.dto.info.WeatherInfoDto;
-import com.kth.message.weather.web.dto.request.ParamDto;
-import com.kth.message.weather.web.dto.request.RequestActionDto;
-import com.kth.message.weather.web.dto.request.skill.WeatherDto;
-import com.kth.message.weather.web.dto.response.TemplateDto;
-import com.kth.message.weather.web.dto.response.skill.simpletext.SimpleTextContentDto;
-import com.kth.message.weather.web.dto.response.skill.simpletext.SimpleTextDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;

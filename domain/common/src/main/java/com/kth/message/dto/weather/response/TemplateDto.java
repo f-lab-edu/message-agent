@@ -1,6 +1,5 @@
-package com.kth.message.weather.web.dto.response;
+package com.kth.message.dto.weather.response;
 
-import com.kth.message.weather.web.dto.response.skill.simpletext.SimpleTextDto;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.Builder;

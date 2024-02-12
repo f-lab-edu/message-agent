@@ -1,4 +1,4 @@
-package com.kth.message.weather.web.dto.request;
+package com.kth.message.dto.weather.request;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.As;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
-import com.kth.message.weather.web.dto.request.skill.WeatherDto;
 import lombok.Getter;
 import lombok.experimental.SuperBuilder;
 

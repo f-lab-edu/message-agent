@@ -1,4 +1,4 @@
-package com.kth.message.weather.web.dto.response.skill.simpletext;
+package com.kth.message.dto.weather.response;
 
 import lombok.Builder;
 import lombok.Getter;

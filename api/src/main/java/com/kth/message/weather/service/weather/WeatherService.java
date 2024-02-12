@@ -1,10 +1,10 @@
 package com.kth.message.weather.service.weather;
 
+import com.kth.message.dto.weather.WeatherInfoDto;
+import com.kth.message.dto.weather.request.WeatherDto;
 import com.kth.message.entity.Geometry;
 import com.kth.message.weather.properties.WeatherProperties;
 import com.kth.message.weather.repository.GeometryRepository;
-import com.kth.message.weather.web.dto.info.WeatherInfoDto;
-import com.kth.message.weather.web.dto.request.skill.WeatherDto;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;

@@ -1,4 +1,4 @@
-package com.kth.message.dto.weather.response;
+package com.kth.message.dto.weather;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
