@@ -19,11 +19,12 @@ public class CSVReader {
         FlatFileItemReader<Geometry> flatFileItemReader = new FlatFileItemReader<>();
         flatFileItemReader.setResource(new ClassPathResource("weather.csv"));
         flatFileItemReader.setEncoding("UTF-8");
+        flatFileItemReader.setLinesToSkip(1);
 
         DefaultLineMapper<Geometry> defaultLineMapper = new DefaultLineMapper<>();
 
         DelimitedLineTokenizer delimitedLineTokenizer = new DelimitedLineTokenizer(",");
-        delimitedLineTokenizer.setNames("region_city", "region_town", "region_village", "nx", "ny");
+        delimitedLineTokenizer.setNames("id", "region_city", "region_town", "region_village", "nx", "ny");
         defaultLineMapper.setLineTokenizer(delimitedLineTokenizer);
 
         BeanWrapperFieldSetMapper<Geometry> beanWrapperFieldSetMapper = new BeanWrapperFieldSetMapper<>();

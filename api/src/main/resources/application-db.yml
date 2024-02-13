@@ -1,7 +1,7 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://mysql-container:3306/spring_batch?characterEncoding=UTF-8&serverTimezone=Asia/Seoul
+    url: jdbc:mysql://mysql-container:3306/spring_batch?&characterEncoding=UTF-8&serverTimezone=Asia/Seoul&rewriteBatchedStatements=true
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
 
@@ -14,7 +14,10 @@ spring:
     properties:
       hibernate:
         format_sql: true
-        default_batch_fetch_size: 1000
+        jdbc:
+          batch_size: 1000
+          order_inserts: true
+          order_updates: true
     defer-datasource-initialization: true
 
   batch:

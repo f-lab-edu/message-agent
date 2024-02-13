@@ -19,7 +19,6 @@ import lombok.Setter;
 public class Geometry {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	@Column(name = "region_city")
