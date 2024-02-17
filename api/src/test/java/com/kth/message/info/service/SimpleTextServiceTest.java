@@ -1,10 +1,12 @@
 package com.kth.message.info.service;
 
+import static org.mockito.Mockito.when;
+
+import com.kth.message.dto.weather.WeatherInfoDto;
+import com.kth.message.dto.weather.request.WeatherDto;
+import com.kth.message.dto.weather.response.SimpleTextContentDto;
 import com.kth.message.weather.service.SimpleTextService;
 import com.kth.message.weather.service.weather.WeatherService;
-import com.kth.message.weather.web.dto.info.WeatherInfoDto;
-import com.kth.message.weather.web.dto.request.skill.WeatherDto;
-import com.kth.message.weather.web.dto.response.skill.simpletext.SimpleTextContentDto;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,8 +14,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import reactor.core.publisher.Mono;
-
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class SimpleTextServiceTest {

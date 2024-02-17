@@ -1,12 +1,12 @@
 package com.kth.message.info.web.controller.integration;
 
+import com.kth.message.dto.weather.WeatherInfoDto;
+import com.kth.message.dto.weather.request.WeatherDto;
+import com.kth.message.dto.weather.response.SimpleTextContentDto;
+import com.kth.message.dto.weather.response.SimpleTextDto;
+import com.kth.message.dto.weather.response.TemplateDto;
 import com.kth.message.weather.service.SimpleTextService;
 import com.kth.message.info.web.controller.util.JsonReader;
-import com.kth.message.weather.web.dto.info.WeatherInfoDto;
-import com.kth.message.weather.web.dto.request.skill.WeatherDto;
-import com.kth.message.weather.web.dto.response.TemplateDto;
-import com.kth.message.weather.web.dto.response.skill.simpletext.SimpleTextContentDto;
-import com.kth.message.weather.web.dto.response.skill.simpletext.SimpleTextDto;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,7 +54,7 @@ public class SimpleTextControllerTest {
                 .simpleText(simpleTextContentDto)
                 .build();
 
-        TemplateDto<SimpleTextDto> templateDto = TemplateDto.<SimpleTextDto>builder()
+        TemplateDto templateDto = TemplateDto.builder()
                 .build();
 
         templateDto.addOutput(simpleTextDto);
