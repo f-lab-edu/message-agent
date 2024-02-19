@@ -1,4 +1,8 @@
 rootProject.name = 'message-agent'
-include 'domain'
-include 'infra'
 include 'api'
+include 'domain'
+include 'domain:entity'
+findProject(':domain:entity')?.name = 'entity'
+include 'domain:common'
+findProject(':domain:common')?.name = 'common'
+

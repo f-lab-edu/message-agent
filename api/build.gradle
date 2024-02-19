@@ -8,34 +8,30 @@ repositories {
     mavenCentral()
 }
 
-ext {
-    set('springCloudVersion', "2022.0.3")
-}
-
-dependencyManagement {
-    imports {
-        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
-    }
-}
-
 jar{
     enabled = false
 }
 
 dependencies {
-    implementation project(':domain')
-    implementation project(':infra')
+    implementation project(':domain:entity')
+    implementation project(':domain:common')
 
     annotationProcessor 'org.projectlombok:lombok'
 
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'org.apache.commons:commons-csv:1.10.0'
     implementation 'org.json:json:20231013'
     implementation 'org.projectlombok:lombok'
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
     implementation 'org.springframework.boot:spring-boot-starter-cache'
-    implementation 'com.github.ben-manes.caffeine:caffeine'
     implementation 'org.springframework.batch:spring-batch-core'
+    implementation 'com.github.ben-manes.caffeine:caffeine'
+    implementation 'io.micrometer:micrometer-registry-prometheus'
+
+    runtimeOnly 'com.mysql:mysql-connector-j'
+    runtimeOnly 'com.h2database:h2'
 
     testAnnotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'

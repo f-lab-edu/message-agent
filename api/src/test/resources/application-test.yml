@@ -19,6 +19,10 @@ spring:
         format_sql: true
     defer-datasource-initialization: true
 
+  batch:
+    jdbc:
+      initialize-schema: always
+
 logging:
   level:
     org.hibernate.SQL: debug

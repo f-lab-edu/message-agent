@@ -10,7 +10,7 @@ services:
       - "3306:3306"
     volumes:
       - mysql-volume:/var/lib/mysql
-      - ./domain/init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
+      - ./api/init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
     networks:
       - my-network
 
@@ -23,10 +23,41 @@ services:
     networks:
       - my-network
 
+  prometheus:
+    image: prom/prometheus:v2.33.1
+    volumes:
+      - ./prometheus:/etc/prometheus
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.enable-lifecycle'
+    ports:
+      - '9090:9090'
+    networks:
+      - monitoring
+
+  grafana:
+    image: grafana/grafana:8.3.3
+    volumes:
+      - grafana_data:/var/lib/grafana
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=secret
+    depends_on:
+      - prometheus
+    ports:
+      - '3000:3000'
+    networks:
+      - monitoring
+
 networks:
   my-network:
+    driver: bridge
+  monitoring:
     driver: bridge
 
 volumes:
   mysql-volume:
     driver: local
+  prometheus_data:
+  grafana_data:
