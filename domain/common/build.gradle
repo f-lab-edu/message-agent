@@ -2,10 +2,6 @@ plugins {
     id 'java'
 }
 
-jar {
-    enabled = true
-}
-
 repositories {
     mavenCentral()
 }
