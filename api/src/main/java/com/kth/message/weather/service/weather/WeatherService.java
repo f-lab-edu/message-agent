@@ -32,7 +32,6 @@ public class WeatherService {
 		this.geometryRepository = geometryRepository;
 	}
 
-	@Async
 	public Mono<WeatherInfoDto> getWeatherInfoDto(WeatherDto weatherDto) {
 		String location = weatherDto.getLocation();
 
