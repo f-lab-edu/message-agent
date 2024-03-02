@@ -7,10 +7,10 @@ import lombok.Getter;
 @Getter
 public class RequestEventBotDto {
 
-	private final Long botId;
+	private final String botId;
 
 	@JsonCreator
-	public RequestEventBotDto(@JsonProperty("id") Long botId) {
+	public RequestEventBotDto(@JsonProperty("id") String botId) {
 		this.botId = botId;
 	}
 }

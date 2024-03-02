@@ -18,4 +18,12 @@ public class RequestEventUserDto {
 		this.eventUserInfoDto = eventUserInfoDto;
 		this.timezone = timezone;
 	}
+
+	public String getUserId() {
+		return eventUserInfoDto.getId();
+	}
+
+	public String getUserType() {
+		return eventUserInfoDto.getType();
+	}
 }

@@ -2,6 +2,7 @@ package com.kth.message.dto.event.request;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.kth.message.dto.event.UserInfoDto;
 import lombok.Getter;
 
 @Getter
@@ -19,5 +20,20 @@ public class RequestEventDto {
 		this.requestEventUserDto = requestEventUserDto;
 		this.requestEventBotDto = requestEventBotDto;
 		this.requestEventActionDto = requestEventActionDto;
+	}
+
+	public EventInfoDto getEventInfoDto() {
+		return requestEventActionDto.getEventInfoDto();
+	}
+
+	public UserInfoDto getUserInfoDto() {
+		return new UserInfoDto(
+			requestEventUserDto.getUserId(),
+			requestEventUserDto.getUserType(),
+			requestEventUserDto.getTimezone());
+	}
+
+	public String getBotId() {
+		return requestEventBotDto.getBotId();
 	}
 }
