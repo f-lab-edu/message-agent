@@ -29,8 +29,8 @@ public class RequestEventDto {
 	public UserInfoDto getUserInfoDto() {
 		return new UserInfoDto(
 			requestEventUserDto.getUserId(),
-			requestEventUserDto.getUserType(),
-			requestEventUserDto.getTimezone());
+			requestEventUserDto.getUserType()
+		);
 	}
 
 	public String getBotId() {

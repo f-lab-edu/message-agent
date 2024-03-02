@@ -18,7 +18,7 @@ public class Member {
 	private String botId;
 	private String kakaoUserId;
 	private String type;
-	private String timezone;
+	private String location;
 	private String time;
 	private String infoType;
 	private String eventType;
@@ -28,7 +28,7 @@ public class Member {
 		this.botId = botId;
 		this.kakaoUserId = kakaoUserId;
 		this.type = type;
-		this.timezone = timezone;
+		this.location = timezone;
 		this.time = time;
 		this.infoType = infoType;
 		this.eventType = eventType;

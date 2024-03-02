@@ -6,6 +6,7 @@ import com.kth.message.dto.weather.WeatherInfoDto;
 import com.kth.message.dto.weather.request.WeatherDto;
 import com.kth.message.dto.weather.response.SimpleTextContentDto;
 import com.kth.message.weather.service.SimpleTextService;
+import com.kth.message.weather.service.weather.EventService;
 import com.kth.message.weather.service.weather.WeatherService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,15 +21,19 @@ class SimpleTextServiceTest {
 
     @Mock
     WeatherService weatherService;
+    @Mock
+    EventService eventService;
+
     SimpleTextService simpleTextService;
 
     @BeforeEach
     void setUp() {
-        simpleTextService = new SimpleTextService(weatherService);
+        simpleTextService = new SimpleTextService(weatherService, eventService);
     }
 
     @Test
-    void createWeatherMessage() {
+    void
+    createWeatherMessage() {
         WeatherDto weatherDto = WeatherDto.builder()
                 .location("대전광역시 서구 둔산동")
                 .build();
