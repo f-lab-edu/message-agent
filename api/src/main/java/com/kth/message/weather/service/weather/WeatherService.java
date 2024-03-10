@@ -11,6 +11,7 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -76,6 +77,7 @@ public class WeatherService {
 		return geometryRepository.findByRegionCityAndRegionTownAndRegionVillage(regionCity, regionTown, regionVillage);
 	}
 
+	@Cacheable(value="weatherLocation", key = "#nx.concat('_').concat('#ny')")
 	public Mono<String> getWeatherInfo(String nx, String ny) {
 		return webClient.get()
 			.uri(uriBuilder -> uriBuilder
