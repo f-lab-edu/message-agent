@@ -11,6 +11,8 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -32,7 +34,6 @@ public class WeatherService {
 		this.geometryRepository = geometryRepository;
 	}
 
-	@Async
 	public Mono<WeatherInfoDto> getWeatherInfoDto(WeatherDto weatherDto) {
 		String location = weatherDto.getLocation();
 
@@ -66,6 +67,7 @@ public class WeatherService {
 			});
 	}
 
+	@Cacheable(cacheNames = "locationCache", key = "#location")
 	public Geometry findByGeometryByLocation(String location) {
 		String[] parts = location.split(" ", 3);
 

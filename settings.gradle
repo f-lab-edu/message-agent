@@ -2,7 +2,4 @@ rootProject.name = 'message-agent'
 include 'api'
 include 'domain'
 include 'domain:entity'
-findProject(':domain:entity')?.name = 'entity'
 include 'domain:common'
-findProject(':domain:common')?.name = 'common'
-
