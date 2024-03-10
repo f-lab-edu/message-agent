@@ -34,6 +34,7 @@ public class SimpleTextService {
 				.text(text)
 				.build()
 			).map(this::setUpTextMessage);
+
 	}
 
 	public Mono<SimpleTextContentDto> createWeatherMessage(WeatherDto weatherDto) {

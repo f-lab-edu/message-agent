@@ -10,17 +10,14 @@ public class EventInfoDto {
 	private final String time;
 	private final String infoType;
 	private final String eventType;
-	private final String location;
 
 	@JsonCreator
 	public EventInfoDto(
 		@JsonProperty("time") String time,
 		@JsonProperty("type")String infoType,
-		@JsonProperty("event_type")String eventType,
-		@JsonProperty("location")String location) {
+		@JsonProperty("event_type")String eventType) {
 		this.time = time;
 		this.infoType = infoType;
 		this.eventType = eventType;
-		this.location = location;
 	}
 }

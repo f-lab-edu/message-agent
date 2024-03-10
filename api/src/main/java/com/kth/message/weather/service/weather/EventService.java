@@ -2,6 +2,8 @@ package com.kth.message.weather.service.weather;
 
 import com.kth.message.dto.event.AlarmSuccessInfoDto;
 import com.kth.message.dto.event.UserInfoDto;
+import com.kth.message.dto.event.message.EventMemberDto;
+import com.kth.message.dto.event.message.EventMessageDto;
 import com.kth.message.dto.event.request.EventInfoDto;
 import com.kth.message.dto.event.request.RequestEventDto;
 import com.kth.message.entity.Member;
@@ -43,7 +45,7 @@ public class EventService {
 			Member member = new Member(botId,
 				userInfoDto.getId(),
 				userInfoDto.getType(),
-				eventInfoDto.getLocation(),
+				userInfoDto.getTimezone(),
 				eventInfoDto.getTime(),
 				eventInfoDto.getInfoType(),
 				eventInfoDto.getEventType());
@@ -52,7 +54,7 @@ public class EventService {
 
 			return new AlarmSuccessInfoDto(memberInfo.getId(),
 				memberInfo.getEventType(),
-				memberInfo.getLocation(),
+				memberInfo.getTimezone(),
 				memberInfo.getTime());
 		}).subscribeOn(Schedulers.boundedElastic());
 	}

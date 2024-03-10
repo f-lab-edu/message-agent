@@ -8,13 +8,15 @@ import lombok.Getter;
 public class RequestEventUserDto {
 
 	private final EventUserInfoDto eventUserInfoDto;
-
+	private final String timezone;
 
 	@JsonCreator
 	public RequestEventUserDto(
-		@JsonProperty("user") EventUserInfoDto eventUserInfoDto)
+		@JsonProperty("user") EventUserInfoDto eventUserInfoDto,
+		@JsonProperty("timezone") String timezone)
 	{
 		this.eventUserInfoDto = eventUserInfoDto;
+		this.timezone = timezone;
 	}
 
 	public String getUserId() {

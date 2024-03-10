@@ -9,5 +9,6 @@ public class UserInfoDto {
 
 	private final String id;
 	private final String type;
+	private final String timezone;
 
 }
