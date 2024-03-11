@@ -1,5 +1,6 @@
 package com.kth.message.weather.service.weather;
 
+import com.kth.message.dto.cache.WeatherCacheDto;
 import com.kth.message.dto.weather.WeatherInfoDto;
 import com.kth.message.dto.weather.request.WeatherDto;
 import com.kth.message.entity.Geometry;
@@ -41,7 +42,7 @@ public class WeatherService {
 
 		return getWeatherInfo(geometry.getNx(), geometry.getNy())
 			.map(weatherInfo -> {
-				JSONObject jsonObject = new JSONObject(weatherInfo);
+				JSONObject jsonObject = new JSONObject(weatherInfo.getWeatherData());
 				JSONArray jsonArray = jsonObject.getJSONObject("response")
 					.getJSONObject("body")
 					.getJSONObject("items")
@@ -78,7 +79,25 @@ public class WeatherService {
 		return geometryRepository.findByRegionCityAndRegionTownAndRegionVillage(regionCity, regionTown, regionVillage);
 	}
 
-	public Mono<String> getWeatherInfo(String nx, String ny) {
+	public Mono<WeatherCacheDto> getWeatherInfo(String nx, String ny) {
+		return getWeatherApiData(nx, ny)
+			.flatMap(weatherApiData -> {
+				LocalDateTime now = ZonedDateTime.now(ZoneId.of("Asia/Seoul")).toLocalDateTime();
+				if (isCacheHit(weatherApiData.getLocalDateTime(), now)) {
+					return evictWeatherCache(nx, ny).then(getWeatherApiData(nx, ny));
+				}
+				return Mono.just(weatherApiData);
+			});
+	}
+
+	private boolean isCacheHit(LocalDateTime cachedTime, LocalDateTime now) {
+		int cachedHours = cachedTime.minusHours(cachedTime.getMinute() < 40 ? 1 : 0).getHour();
+		int nowHours = now.minusHours(now.getMinute() < 40 ? 1 : 0).getHour();
+		return cachedHours != nowHours;
+	}
+
+	@Cacheable(value="weatherLocation", key = "#nx.concat('_').concat('#ny')")
+	public Mono<WeatherCacheDto> getWeatherApiData(String nx, String ny) {
 		return webClient.get()
 			.uri(uriBuilder -> uriBuilder
 				.path("/1360000/VilageFcstInfoService_2.0/getUltraSrtNcst")
@@ -92,9 +111,14 @@ public class WeatherService {
 				.queryParam("ny", ny)
 				.build())
 			.retrieve()
-			.bodyToMono(String.class);
+			.bodyToMono(String.class)
+			.map(WeatherCacheDto::new);
 	}
 
+	@CacheEvict(value = "weatherCache", key = "#nx.concat('-').concat(#ny)")
+	public Mono<Void> evictWeatherCache(String nx, String ny) {
+		return Mono.empty();
+	}
 
 	private String getBaseDate() {
 		return ZonedDateTime.now(ZoneId.of("Asia/Seoul")).toLocalDateTime()
